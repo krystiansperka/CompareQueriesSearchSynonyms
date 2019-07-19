@@ -27,6 +27,7 @@ namespace Findsynonyms
             Console.WriteLine("Hello World!");
 
             var example = new Example();
+            example.LoadData();
             example.DetermineSynonyms();
 
         }
@@ -60,10 +61,8 @@ namespace Findsynonyms
         // Define delimiter like { ' ', ',', '.', ':', '\t' };
         public char[] delimiterChars = { ' ' };
 
-
-        public List<bool> DetermineSynonyms()
+        public void LoadData()
         {
-
             // Add Synonyms to list
             listOfSynonims.Add(new PairOfSynonyms() { Value1 = "approval", Value2 = "popularity" });
             listOfSynonims.Add(new PairOfSynonyms() { Value1 = "rate", Value2 = "percentage" });
@@ -77,7 +76,13 @@ namespace Findsynonyms
             listOfQueries.Add(new PairOfQueries() { Query1 = "approval rate", Query2 = "popularity ratings" });
             //.....
 
+        }
 
+
+        public List<bool> DetermineSynonyms()
+        {
+
+           
             foreach (PairOfQueries pairOfQueries in listOfQueries)
             {
                 //https://docs.microsoft.com/pl-pl/dotnet/csharp/how-to/parse-strings-using-split#code-try-0
