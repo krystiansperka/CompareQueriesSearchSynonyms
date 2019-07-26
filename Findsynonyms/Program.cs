@@ -28,7 +28,9 @@ namespace Findsynonyms
 
             var example = new Example();
             example.LoadData();
+            example.LoadDictionary();
             example.DetermineSynonyms();
+            example.DetermineSynonymsWithDictionary();
 
         }
     }
@@ -61,6 +63,9 @@ namespace Findsynonyms
         // Define delimiter like { ' ', ',', '.', ':', '\t' };
         public char[] delimiterChars = { ' ' };
 
+        //Dictionary of Synonyms
+        public Dictionary<string, string> dictionaryOfSynonyms = new Dictionary<string, string>();
+
         public void LoadData()
         {
             // Add Synonyms to list
@@ -78,17 +83,27 @@ namespace Findsynonyms
 
         }
 
+        public void LoadDictionary()
+        {
+            foreach (PairOfSynonyms pairOfSynonyms in listOfSynonims)
+            {
+                if (!dictionaryOfSynonyms.ContainsKey(pairOfSynonyms.Value1))
+                {
+                    dictionaryOfSynonyms.Add(pairOfSynonyms.Value1, pairOfSynonyms.Value2);
+                }
+
+                if (!dictionaryOfSynonyms.ContainsKey(pairOfSynonyms.Value2))
+                {
+                    dictionaryOfSynonyms.Add(pairOfSynonyms.Value2, pairOfSynonyms.Value1);
+                }
+            }
+        }
+
 
         public List<bool> DetermineSynonyms()
         {
-
-           
             foreach (PairOfQueries pairOfQueries in listOfQueries)
             {
-                //https://docs.microsoft.com/pl-pl/dotnet/csharp/how-to/parse-strings-using-split#code-try-0
-                //https://www.dotnetperls.com/split
-                //https://www.c-sharpcorner.com/UploadFile/mahesh/split-string-in-C-Sharp/
-                //https://docs.microsoft.com/pl-pl/dotnet/api/system.string.split?view=netframework-4.8
                 string[] wordsInQuery1 = pairOfQueries.Query1.Split(delimiterChars);
                 string[] wordsInQuery2 = pairOfQueries.Query2.Split(delimiterChars);
                 bool result = false;
@@ -120,6 +135,42 @@ namespace Findsynonyms
                 listOfResults.Add(result);
 
             }
+
+            return listOfResults;
+        }
+
+        public List<bool> DetermineSynonymsWithDictionary()
+        {
+            foreach (PairOfQueries pairOfQueries in listOfQueries)
+            {
+                string[] wordsInQuery1 = pairOfQueries.Query1.Split(delimiterChars);
+                string[] wordsInQuery2 = pairOfQueries.Query2.Split(delimiterChars);
+                bool result = false;
+                int countWordsInQuery = 0;
+
+                foreach (var word in wordsInQuery1)
+                {
+                    var word2 = wordsInQuery2[countWordsInQuery];
+                    result = false;
+
+                    if (word == word2) result = true;
+                    else
+                    {
+                        if (dictionaryOfSynonyms.TryGetValue(word, out string wordFromDict))
+                        {
+                            if (word2 == wordFromDict) result = true;
+                        }
+
+                    }
+
+                    if (result == false) break;
+                    countWordsInQuery++;
+                }
+
+                listOfResults.Add(result);
+
+            }
+
             return listOfResults;
         }
     }

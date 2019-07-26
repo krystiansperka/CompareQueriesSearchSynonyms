@@ -1,0 +1,7 @@
+﻿                //https://docs.microsoft.com/pl-pl/dotnet/csharp/how-to/parse-strings-using-split#code-try-0
+                //https://www.dotnetperls.com/split
+                //https://www.c-sharpcorner.com/UploadFile/mahesh/split-string-in-C-Sharp/
+                //https://docs.microsoft.com/pl-pl/dotnet/api/system.string.split?view=netframework-4.8
+                
+                
+                
